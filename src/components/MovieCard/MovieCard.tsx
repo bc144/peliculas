@@ -1,8 +1,7 @@
 'use client';
 
-import Config from "@/config";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 interface MovieCardProps {
@@ -15,16 +14,12 @@ interface MovieCardProps {
 }
 
 const MovieCard = ({ id, title, voteAverage, posterPath, releaseYear, description }: MovieCardProps) => {
-    const [isHovered, setIsHovered] = useState(false);
     const [imageError, setImageError] = useState(false);
-
-    const poster = posterPath ? Config.IMAGE_SOURCE + posterPath : '';
+    const poster = posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : '';
 
     return (
         <div
             className="relative group bg-gray-900 rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] border border-gray-800"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
         >
             <Link href={`/movie/${id}`} className="block">
                 <div className="relative aspect-[2/3] w-full">

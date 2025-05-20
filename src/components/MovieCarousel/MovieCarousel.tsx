@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { IMovieDetail } from '@/types/IMovieDetail';
+import { IMovieDetail } from '../../types/IMovieDetail';
 import Image from 'next/image';
 import Link from 'next/link';
-import Config from '@/config';
 
 interface MovieCarouselProps {
     movies: IMovieDetail[];

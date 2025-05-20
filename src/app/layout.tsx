@@ -1,31 +1,27 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import  Header  from "@/components/Header/Header";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import Header from '@/components/Header/Header';
 import { GuestSessionProvider } from "@/providers/guestSessionContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ['latin'] });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
+export const metadata: Metadata = {
+  title: 'Movies DB',
+  description: 'Your favorite movies database',
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className={`antialiased`}>
+    <html lang="en" className={inter.className}>
+      <body>
         <GuestSessionProvider>
-        <Header />
-        <main className="p-6 mt-16">{children}</main>
+          <Header />
+          <main className="p-6 mt-16">{children}</main>
         </GuestSessionProvider>
       </body>
     </html>

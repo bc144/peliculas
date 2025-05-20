@@ -6,14 +6,14 @@ import { IMovieDetail } from "../../../types/IMovieDetail";
 import { getMovieById } from "../../../services/movies/getMovieById";
 import { getSimilarMovies } from "../../../services/movies/getSimilarMovies";
 import LoadingSpinner from "../../../components/ui/LoadingSpinner";
-import MovieList from "../../../components/MovieList/MovieList";
 import MovieCard from "../../../components/MovieCard/MovieCard";
 
 export default function MovieDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const [movie, setMovie] = useState<IMovieDetail | null>(null);
   const [similarMovies, setSimilarMovies] = useState<IMovieDetail[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
 
   // Function to check if a movie is in favorites
@@ -48,25 +48,25 @@ export default function MovieDetailPage({ params }: { params: Promise<{ id: stri
     }
   };
 
-  // Load movie and check favorite status
   useEffect(() => {
-    const loadMovie = async () => {
-      setIsLoading(true);
+    const fetchData = async () => {
       try {
+        setLoading(true);
+        setError("");
         const movieData = await getMovieById(resolvedParams.id);
         setMovie(movieData);
         checkFavoriteStatus(movieData.id);
-
-        // Fetch similar movies
-        const similarMoviesData = await getSimilarMovies(resolvedParams.id);
-        setSimilarMovies(similarMoviesData);
-      } catch (error) {
-        console.error('Error loading movie:', error);
+        const similar = await getSimilarMovies(resolvedParams.id);
+        setSimilarMovies(similar);
+      } catch (err) {
+        setError("Failed to fetch movie details");
+        console.error("Error fetching movie:", err);
+      } finally {
+        setLoading(false);
       }
-      setIsLoading(false);
     };
 
-    loadMovie();
+    fetchData();
   }, [resolvedParams.id]);
 
   // Function to toggle favorite status
@@ -130,8 +130,28 @@ export default function MovieDetailPage({ params }: { params: Promise<{ id: stri
     }
   };
 
-  if (isLoading || !movie) {
-    return <LoadingSpinner />;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-red-500">
+        {error}
+      </div>
+    );
+  }
+
+  if (!movie) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        Movie not found
+      </div>
+    );
   }
 
   return (
@@ -209,7 +229,7 @@ export default function MovieDetailPage({ params }: { params: Promise<{ id: stri
 
             {movie.tagline && (
               <p className="text-xl text-gray-600 dark:text-gray-400 italic mb-6">
-                "{movie.tagline}"
+                &quot;{movie.tagline}&quot;
               </p>
             )}
 
