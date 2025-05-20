@@ -19,4 +19,4 @@ const Pill = ({ text, color = "default" }: PillProps) => {
     );
 };
 
-export default Pill;
+export default Pill; 

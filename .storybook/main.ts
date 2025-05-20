@@ -12,7 +12,7 @@ const config: StorybookConfig = {
     "@storybook/experimental-addon-test"
   ],
   "framework": {
-    "name": "@storybook/nextjs",
+    "name": "@storybook/experimental-nextjs-vite",
     "options": {}
   },
   "staticDirs": [
